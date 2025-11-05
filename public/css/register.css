@@ -1,0 +1,213 @@
+/* Registration Page Styles */
+body {
+    background: linear-gradient(135deg, #fdf2e9 0%, #f8f1e6 100%); /* Warm African-inspired background */
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.register-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+    position: relative;
+}
+
+/* Back to Index Button */
+.back-to-index {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+}
+
+.btn-back:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-back i {
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .back-to-index {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+    }
+    
+    .btn-back {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    
+    .register-container {
+        padding: 1rem 0;
+    }
+    
+    .card {
+        min-width: auto;
+        margin: 0 10px;
+    }
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    background: rgba(253, 242, 233, 0.95); /* Warm cream card background */
+    width: 100%;
+    max-width: 700px;
+    min-width: 500px;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #e67e22, #f39c12); /* Warm African sunset header */
+    color: white;
+    border-radius: 15px 15px 0 0 !important;
+    text-align: center;
+    padding: 2rem;
+}
+
+.card-header h4 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.form-control, .form-select {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    padding: 15px 20px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    height: auto;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
+}
+
+.btn-custom {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    border: none;
+    border-radius: 10px;
+    padding: 15px 25px;
+    font-weight: 600;
+    font-size: 16px;
+    color: white;
+    transition: all 0.3s ease;
+    min-height: 50px;
+}
+
+.btn-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+    color: white;
+}
+
+.highlight {
+    color: #ff6b6b;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.highlight:hover {
+    color: #ee5a24;
+    text-decoration: underline;
+}
+
+.custom-radio .form-check-input {
+    margin-top: 0.3rem;
+}
+
+.custom-radio .form-check-label {
+    margin-left: 0.5rem;
+    font-weight: 500;
+}
+
+.form-check-input:checked {
+    background-color: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+.form-check-input:focus {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
+}
+
+.alert {
+    border-radius: 10px;
+    border: none;
+    padding: 1rem 1.5rem;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    opacity: 0.7;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+/* Form spacing improvements */
+.card-body {
+    padding: 2.5rem;
+}
+
+.mb-3 {
+    margin-bottom: 1.5rem !important;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.75rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card {
+        min-width: 320px;
+        max-width: 100%;
+        margin: 1rem;
+    }
+    
+    .card-body {
+        padding: 2rem;
+    }
+    
+    .form-control, .form-select {
+        padding: 12px 15px;
+        font-size: 16px;
+    }
+    
+    .btn-custom {
+        padding: 12px 20px;
+        font-size: 16px;
+    }
+}

@@ -1,0 +1,281 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #fdf2e9 0%, #f8f1e6 100%); /* Warm African-inspired background */
+}
+
+/* Login Container */
+.login-container {
+    width: 100%;
+    max-width: 500px;
+    min-width: 450px;
+    background: #fdf2e9; /* Warm cream background */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(230, 126, 34, 0.2); /* Warm orange shadow */
+    margin: 20px;
+    position: relative;
+}
+
+/* Back to Index Button */
+.back-to-index {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+}
+
+.btn-back:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-back i {
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .back-to-index {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+    }
+    
+    .btn-back {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    
+    .login-container {
+        margin: 10px;
+        padding: 20px;
+        min-width: auto;
+    }
+}
+
+/* Form Styling */
+.login-form {
+    position: relative;
+}
+
+.login-form h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: white;
+    font-size: 2.2rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%); /* Warm African sunset gradient */
+    padding: 25px;
+    margin: -40px -40px 30px -40px;
+    border-radius: 15px 15px 0 0;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    border: 2px solid #d2691e; /* Warm brown border */
+    border-radius: 10px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    background-color: #fdf2e9; /* Warm cream input background */
+    height: 50px;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: #e67e22; /* Warm orange focus border */
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1); /* Warm orange focus shadow */
+}
+
+.login-form input::placeholder {
+    color: #adb5bd;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%); /* Warm African sunset button */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-bottom: 25px;
+    height: 55px;
+}
+
+.login-form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(230, 126, 34, 0.3); /* Warm orange hover shadow */
+}
+
+.login-form button:active {
+    transform: translateY(0);
+}
+
+/* Options Section */
+.options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.options label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+    font-weight: 400;
+    color: #666;
+    cursor: pointer;
+}
+
+.options input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+    margin-bottom: 0;
+}
+
+.options a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.options a:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+
+/* Register Link */
+.register-link {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e1e5e9;
+}
+
+.register-link p {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.register-link a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.register-link a:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .login-container {
+        margin: 10px;
+        padding: 20px;
+    }
+    
+    .login-form h2 {
+        font-size: 1.5rem;
+        margin-bottom: 25px;
+    }
+    
+    .login-form input {
+        padding: 10px 12px;
+        margin-bottom: 15px;
+    }
+    
+    .login-form button {
+        padding: 10px;
+    }
+    
+    .options {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+}
+
+/* Animation */
+.login-container {
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Focus styles for accessibility */
+.login-form input:focus,
+.login-form button:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+/* Loading state */
+.login-form button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.login-form button:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
