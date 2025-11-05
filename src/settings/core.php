@@ -32,11 +32,6 @@ function init_user_session($user_data) {
     $_SESSION['login_time'] = time();
     $_SESSION['last_activity'] = time();
     $_SESSION['session_valid'] = true;
-    
-    // If user is admin, set redirect URL to admin dashboard
-    if ($user_data['role'] === 'admin') {
-        $_SESSION['redirect_after_login'] = '../admin/dashboard.php';
-    }
 }
 
 /**

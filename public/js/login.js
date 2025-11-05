@@ -51,14 +51,7 @@ $(document).ready(function() {
                         } else if (response.user_data.role === 'owner' || response.user_data.role === 'restaurant_owner') {
                             window.location.href = '../customer/owner_dashboard.php';
                         } else {
-                            // Check if there's a redirect URL stored in session
-                            const urlParams = new URLSearchParams(window.location.search);
-                            const redirectUrl = urlParams.get('redirect');
-                            if (redirectUrl) {
-                                window.location.href = decodeURIComponent(redirectUrl);
-                            } else {
-                                window.location.href = '../customer/customer_dashboard.php';
-                            }
+                            window.location.href = '../customer/customer_dashboard.php';
                         }
                     });
                 } else {

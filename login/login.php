@@ -6,12 +6,6 @@ require_once '../src/settings/core.php';
 if (is_user_logged_in()) {
     // Check if there's a redirect URL stored
     $redirect_url = isset($_SESSION['redirect_after_login']) ? $_SESSION['redirect_after_login'] : '../index.php';
-    
-    // If the user is an admin, always redirect to admin dashboard
-    if (is_user_admin()) {
-        $redirect_url = '../admin/dashboard.php';
-    }
-    
     unset($_SESSION['redirect_after_login']);
     header("Location: $redirect_url");
     exit();

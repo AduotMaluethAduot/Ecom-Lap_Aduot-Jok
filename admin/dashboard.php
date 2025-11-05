@@ -16,9 +16,6 @@ if (!is_session_valid()) {
 $admin_name = get_user_name();
 $admin_email = get_user_email();
 $admin_id = get_user_id();
-
-// Store redirect URL for admin users
-$_SESSION['redirect_after_login'] = '../admin/dashboard.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,11 +40,8 @@ $_SESSION['redirect_after_login'] = '../admin/dashboard.php';
                     <p class="mb-0 mt-2 opacity-75">Welcome, <?php echo htmlspecialchars($admin_name); ?></p>
                 </div>
                 <div class="col-md-6 text-end">
-                    <a href="../customer/customer_dashboard.php" class="btn btn-light me-2">
-                        <i class="fas fa-user"></i> Customer Dashboard
-                    </a>
                     <a href="../index.php" class="btn btn-light me-2">
-                        <i class="fas fa-home"></i> Public Site
+                        <i class="fas fa-home"></i> Back to Site
                     </a>
                     <a href="../login/logout.php" class="btn btn-outline-light">
                         <i class="fas fa-sign-out-alt"></i> Logout
