@@ -294,16 +294,8 @@ $product = $result['data'];
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../public/js/cart.js"></script>
     <script>
-        function addToCart(productId) {
-            Swal.fire({
-                title: 'Add to Cart',
-                text: 'This feature will be available soon!',
-                icon: 'info',
-                confirmButtonText: 'OK'
-            });
-        }
-
         function addToFavorites(productId) {
             Swal.fire({
                 title: 'Add to Favorites',

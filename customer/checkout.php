@@ -1,6 +1,7 @@
 <?php
 // Checkout page with payment integration
 require_once '../src/settings/core.php';
+require_once '../controllers/cart_controller.php';
 
 // Check if user is logged in
 if (!is_user_logged_in()) {
@@ -20,18 +21,13 @@ if (is_user_admin()) {
     exit();
 }
 
-// Get cart data from session or POST
-$cart_items = [];
-$total_amount = 0;
+// Get cart data from database
+$cart_items = get_user_cart_ctr();
+$total_amount = get_cart_total_ctr();
 
-if (isset($_POST['cart_data'])) {
-    $cart_items = json_decode($_POST['cart_data'], true);
-    foreach ($cart_items as $item) {
-        $total_amount += $item['price'] * $item['quantity'];
-    }
-} else {
-    // Redirect to order page if no cart data
-    header('Location: order_food.php');
+// Redirect to cart if cart is empty
+if (empty($cart_items)) {
+    header('Location: cart.php');
     exit();
 }
 ?>
@@ -172,8 +168,8 @@ if (isset($_POST['cart_data'])) {
                                 <div class="card-body">
                                     <form id="paymentForm">
                                         <!-- Mobile Money -->
-                                        <div class="payment-method-card" onclick="selectPaymentMethod('mobile_money')">
-                                            <input type="radio" name="payment_method" value="mobile_money" id="mobile_money">
+                                        <div class="payment-method-card" data-method="mobile_money" onclick="selectPaymentMethod('mobile_money')">
+                                            <input type="radio" name="payment_method" value="mobile_money" id="payment_method_mobile_money">
                                             <div class="d-flex align-items-center">
                                                 <div class="me-3">
                                                     <i class="fas fa-mobile-alt fa-2x text-primary"></i>
@@ -186,8 +182,8 @@ if (isset($_POST['cart_data'])) {
                                         </div>
 
                                         <!-- Bank Transfer -->
-                                        <div class="payment-method-card" onclick="selectPaymentMethod('bank_transfer')">
-                                            <input type="radio" name="payment_method" value="bank_transfer" id="bank_transfer">
+                                        <div class="payment-method-card" data-method="bank_transfer" onclick="selectPaymentMethod('bank_transfer')">
+                                            <input type="radio" name="payment_method" value="bank_transfer" id="payment_method_bank_transfer">
                                             <div class="d-flex align-items-center">
                                                 <div class="me-3">
                                                     <i class="fas fa-university fa-2x text-success"></i>
@@ -200,8 +196,8 @@ if (isset($_POST['cart_data'])) {
                                         </div>
 
                                         <!-- POS Payment -->
-                                        <div class="payment-method-card" onclick="selectPaymentMethod('pos')">
-                                            <input type="radio" name="payment_method" value="pos" id="pos">
+                                        <div class="payment-method-card" data-method="pos" onclick="selectPaymentMethod('pos')">
+                                            <input type="radio" name="payment_method" value="pos" id="payment_method_pos">
                                             <div class="d-flex align-items-center">
                                                 <div class="me-3">
                                                     <i class="fas fa-credit-card fa-2x text-warning"></i>
@@ -214,8 +210,8 @@ if (isset($_POST['cart_data'])) {
                                         </div>
 
                                         <!-- Cash on Delivery -->
-                                        <div class="payment-method-card" onclick="selectPaymentMethod('cash')">
-                                            <input type="radio" name="payment_method" value="cash" id="cash">
+                                        <div class="payment-method-card" data-method="cash" onclick="selectPaymentMethod('cash')">
+                                            <input type="radio" name="payment_method" value="cash" id="payment_method_cash">
                                             <div class="d-flex align-items-center">
                                                 <div class="me-3">
                                                     <i class="fas fa-money-bill-wave fa-2x text-info"></i>
@@ -266,12 +262,12 @@ if (isset($_POST['cart_data'])) {
                                     <div class="order-item">
                                         <div class="d-flex justify-content-between">
                                             <div>
-                                                <strong><?php echo htmlspecialchars($item['name']); ?></strong>
+                                                <strong><?php echo htmlspecialchars($item['product_title']); ?></strong>
                                                 <br>
-                                                <small class="text-muted">Qty: <?php echo $item['quantity']; ?></small>
+                                                <small class="text-muted">Qty: <?php echo $item['qty']; ?></small>
                                             </div>
                                             <div class="text-end">
-                                                <strong>$<?php echo number_format($item['price'] * $item['quantity'], 2); ?></strong>
+                                                <strong>$<?php echo number_format(floatval($item['product_price']) * intval($item['qty']), 2); ?></strong>
                                             </div>
                                         </div>
                                     </div>
@@ -281,15 +277,15 @@ if (isset($_POST['cart_data'])) {
                                 <hr>
                                 <div class="d-flex justify-content-between">
                                     <strong>Total Amount:</strong>
-                                    <strong id="totalAmount">$<?php echo number_format($total_amount, 2); ?></strong>
+                                    <strong id="totalAmount" data-total="<?php echo $total_amount; ?>">$<?php echo number_format($total_amount, 2); ?></strong>
                                 </div>
 
                                 <div class="d-grid gap-2 mt-3">
-                                    <button type="button" class="btn btn-checkout" onclick="placeOrder()">
-                                        <i class="fas fa-check me-2"></i>Place Order
+                                    <button type="button" class="btn btn-checkout" onclick="showPaymentModal()">
+                                        <i class="fas fa-check me-2"></i>Simulate Payment
                                     </button>
-                                    <button type="button" class="btn btn-outline-primary" onclick="goBackToMenu()">
-                                        <i class="fas fa-plus me-2"></i>Continue Shopping
+                                    <button type="button" class="btn btn-outline-primary" onclick="goBackToCart()">
+                                        <i class="fas fa-arrow-left me-2"></i>Back to Cart
                                     </button>
                                 </div>
                             </div>
@@ -303,168 +299,6 @@ if (isset($_POST['cart_data'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        let selectedPaymentMethod = '';
-
-        function selectPaymentMethod(method) {
-            // Remove selected class from all cards
-            document.querySelectorAll('.payment-method-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            
-            // Add selected class to clicked card
-            event.currentTarget.classList.add('selected');
-            
-            // Set radio button
-            document.getElementById(method).checked = true;
-            selectedPaymentMethod = method;
-            
-            // Show/hide receipt upload based on payment method
-            const receiptUpload = document.getElementById('receiptUpload');
-            if (method === 'mobile_money' || method === 'bank_transfer') {
-                receiptUpload.classList.add('show');
-            } else {
-                receiptUpload.classList.remove('show');
-            }
-        }
-
-        // Handle receipt image preview
-        document.getElementById('receipt_image').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('previewImg').src = e.target.result;
-                    document.getElementById('receiptPreview').style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Go back to menu with confirmation
-        function goBackToMenu() {
-            // Check if user has filled any form data
-            const deliveryPhone = document.getElementById('delivery_phone').value;
-            const deliveryAddress = document.getElementById('delivery_address').value;
-            const paymentMethod = document.querySelector('input[name="payment_method"]:checked');
-            
-            if (deliveryPhone || deliveryAddress || paymentMethod) {
-                Swal.fire({
-                    title: 'Leave Checkout?',
-                    text: 'You have entered some information. Are you sure you want to go back to the menu?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, go back',
-                    cancelButtonText: 'Stay here'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'order_food.php';
-                    }
-                });
-            } else {
-                window.location.href = 'order_food.php';
-            }
-        }
-
-        function placeOrder() {
-            // Validate form
-            const deliveryPhone = document.getElementById('delivery_phone').value;
-            const deliveryAddress = document.getElementById('delivery_address').value;
-            
-            if (!deliveryPhone || !deliveryAddress) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Missing Information',
-                    text: 'Please fill in delivery phone and address'
-                });
-                return;
-            }
-            
-            if (!selectedPaymentMethod) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Payment Method Required',
-                    text: 'Please select a payment method'
-                });
-                return;
-            }
-            
-            // Validate receipt upload for mobile money and bank transfer
-            if ((selectedPaymentMethod === 'mobile_money' || selectedPaymentMethod === 'bank_transfer')) {
-                const paymentReference = document.getElementById('payment_reference').value;
-                const receiptImage = document.getElementById('receipt_image').files[0];
-                
-                if (!paymentReference || !receiptImage) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Payment Details Required',
-                        text: 'Please provide payment reference and upload receipt'
-                    });
-                    return;
-                }
-            }
-
-            // Show loading
-            Swal.fire({
-                title: 'Processing Order...',
-                text: 'Please wait while we process your order',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                willOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-
-            // Prepare form data
-            const formData = new FormData();
-            formData.append('action', 'place_order');
-            formData.append('cart_data', JSON.stringify(<?php echo json_encode($cart_items); ?>));
-            formData.append('delivery_phone', deliveryPhone);
-            formData.append('delivery_address', deliveryAddress);
-            formData.append('special_instructions', document.getElementById('special_instructions').value);
-            formData.append('payment_method', selectedPaymentMethod);
-            formData.append('payment_reference', document.getElementById('payment_reference').value);
-            formData.append('total_amount', <?php echo $total_amount; ?>);
-            
-            // Add receipt image if uploaded
-            const receiptImage = document.getElementById('receipt_image').files[0];
-            if (receiptImage) {
-                formData.append('receipt_image', receiptImage);
-            }
-
-            // Submit order
-            fetch('../actions/place_order_action.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Order Placed Successfully!',
-                        text: data.message,
-                        confirmButtonText: 'View Orders'
-                    }).then(() => {
-                        window.location.href = 'my_orders.php';
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Order Failed',
-                        text: data.message
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'An error occurred while placing your order'
-                });
-            });
-        }
-    </script>
+    <script src="../public/js/checkout.js"></script>
 </body>
 </html>
